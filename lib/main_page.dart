@@ -1,5 +1,8 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_kmdb/movie_api.dart';
+import 'movie_Form.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({
@@ -12,10 +15,38 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late var controller = TextEditingController();
+  dynamic body = Center(
+    child: Text('Movies!', style: TextStyle(fontSize: 20)),
+  );
 
-  void searchMovie(String keyword) {
+  void searchMovie(String keyword) async {
     MovieApi movieApi = MovieApi();
-    movieApi.search(keyword);
+    var movies = movieApi.search(keyword);
+
+    setState(() {
+      body = FutureBuilder(
+        future: movies,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var movieData = snapshot.data;
+            return ListView.separated(
+                itemBuilder: (context, index) {
+                  return MovieForm(movie: movieData[index]);
+                },
+                separatorBuilder: (context, index) => Divider(),
+                itemCount: movieData!.length);
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
+      );
+      // body = ListView.separated(
+      //     itemBuilder: (context, index) {
+      //       return MovieForm(movie: movies[index]);
+      //     },
+      //     separatorBuilder: (context, index) => Divider(),
+      //     itemCount: movies.length);
+    });
   }
 
   void showSearchPage() async {
@@ -55,7 +86,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: null,
+      body: body,
       floatingActionButton: FloatingActionButton(
         onPressed: showSearchPage,
         child: Icon(Icons.search),
