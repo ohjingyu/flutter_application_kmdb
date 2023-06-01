@@ -56,7 +56,7 @@ class _MainPageState extends State<MainPage> {
       builder: (context) => Container(
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color: Colors.amber,
+            color: Colors.white,
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10), topRight: Radius.circular(10))),
         height: 200,
@@ -66,6 +66,8 @@ class _MainPageState extends State<MainPage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black)),
                 icon: Icon(Icons.close),
                 label: Text('닫기')),
             TextFormField(
@@ -76,6 +78,8 @@ class _MainPageState extends State<MainPage> {
                   searchMovie(controller.text);
                   Navigator.pop(context);
                 },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black)),
                 child: Text('검색하기'))
           ],
         ),
